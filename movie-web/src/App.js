@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Routes, Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import MovieCard from './MovieCard';
@@ -30,14 +30,6 @@ function App() {
       .catch((error) => console.error('Error fetching search results:', error));
   };
 
-  const handleMovieDetails = (id) => {
-    // Fetch movie details based on the movie ID
-    fetch(`${TMDB_BASE_URL}/movie/${id}?api_key=${API_KEY}`)
-      .then((response) => response.json())
-      .then((data) => MovieDetails(data))
-      .catch((error) => console.error('Error fetching movie details:', error));
-  };
-
   return (
     <Router>
       <div>
@@ -57,7 +49,7 @@ function App() {
         </header>
 
         <Routes>
-          <Route path="/" element={<TopMovies topMovies={topMovies} />} />
+          <Route path="/" element={<TopMovies topMovies={topMovies} searchResults={searchResults} />} />
           <Route path="/movies/:id" element={<MovieDetails />} />
         </Routes>
       </div>
