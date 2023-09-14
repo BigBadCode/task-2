@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
-const MovieCard = ({ movie: { imdbID, Year, Poster, Title, Type } }) => {
+function MovieCard({ movie }) {
+    const [isLiked, setIsLiked] = useState(false);
+
+    const handleLikeClick = () => {
+        setIsLiked(!isLiked);
+    };
+
     return (
-        <div className="movie" key={imdbID}>
-            <div>
-                <p>{Year}</p>
-            </div>
+        <div className="movie-card">
+            <img
+                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                alt={`${movie.title} Poster`}
+            />
+            <h2>{movie.title}</h2>
+            <p>Release Date: {movie.release_date}</p>
 
-            <div>
-                <img src={Poster !== "N/A" ? Poster : "https://via.placeholder.com/400"} alt={Title} />
-            </div>
-
-            <div>
-                <span>{Type}</span>
-                <h3>{Title}</h3>
-            </div>
+            {/* Like Button */}
+            <button onClick={handleLikeClick}>
+                <FontAwesomeIcon icon={faHeart} color={isLiked ? 'red' : 'gray'} />
+            </button>
         </div>
     );
 }

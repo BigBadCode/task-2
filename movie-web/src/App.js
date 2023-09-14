@@ -1,55 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import MovieCard from './MovieCard';
+import TopMovies from './TopMovies';
+import MovieDetails from './MovieDetails';
 
-import MovieCard from "./MovieCard";
-import SearchIcon from "./search.svg";
+const API_KEY = '45d4fa855d053dfccfece8b42341ce93';
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-const API_URL = "https://api.themoviedb.org/3/movie/{movie_id}?apikey=45d4fa855d053dfccfece8b42341ce93";
-
-const App = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [movies, setMovies] = useState([]);
+function App() {
+  const [topMovies, setTopMovies] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    searchMovies("");
+    // Fetch top 10 movies
+    fetch(`${TMDB_BASE_URL}/movie/top_rated?api_key=${API_KEY}&page=1`)
+      .then((response) => response.json())
+      .then((data) => setTopMovies(data.results))
+      .catch((error) => console.error('Error fetching top movies:', error));
   }, []);
 
-  const searchMovies = async (title) => {
-    const response = await fetch(`${API_URL}&s=${title}`);
-    const data = await response.json();
+  const handleSearch = () => {
+    // Fetch movies based on the search query
+    fetch(`${TMDB_BASE_URL}/search/movie?api_key=${API_KEY}&query=${searchQuery}`)
+      .then((response) => response.json())
+      .then((data) => setSearchResults(data.results))
+      .catch((error) => console.error('Error fetching search results:', error));
+  };
 
-    setMovies(data.Search);
+  const handleMovieDetails = (id) => {
+    // Fetch movie details based on the movie ID
+    fetch(`${TMDB_BASE_URL}/movie/${id}?api_key=${API_KEY}`)
+      .then((response) => response.json())
+      .then((data) => MovieDetails(data))
+      .catch((error) => console.error('Error fetching movie details:', error));
   };
 
   return (
-    <div className="app">
-      <h1>Movie Web</h1>
+    <Router>
+      <div>
+        <header>
+          <Link to="/">MovieBox</Link>
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search for movies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button onClick={handleSearch}>
+              <FontAwesomeIcon icon={faSearch} /> {/* Add the search icon */}
+            </button>
+          </div>
+        </header>
 
-      <div className="search">
-        <input
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search for movies"
-        />
-        <img
-          src={SearchIcon}
-          alt="search"
-          onClick={() => searchMovies(searchTerm)}
-        />
+        <Routes>
+          <Route path="/" element={<TopMovies topMovies={topMovies} />} />
+          <Route path="/movies/:id" element={<MovieDetails />} />
+        </Routes>
       </div>
-
-      {movies?.length > 0 ? (
-        <div className="container">
-          {movies.map((movie) => (
-            <MovieCard movie={movie} />
-          ))}
-        </div>
-      ) : (
-        <div className="empty">
-          <h2>No movies found</h2>
-        </div>
-      )}
-    </div>
+    </Router>
   );
-};
+}
+
 
 export default App;
