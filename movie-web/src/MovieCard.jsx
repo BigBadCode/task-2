@@ -12,12 +12,15 @@ function MovieCard({ movie }) {
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
     const [movieRating, setMovieRating] = useState(null);
 
+    const releaseDateUTC = new Date(movie.release_date).toUTCString();
+
     useEffect(() => {
         // Fetch movie details based on the movie ID
         fetch(`${TMDB_BASE_URL}/movie/${movie.id}?api_key=${API_KEY}`)
             .then((response) => response.json())
             .then((data) => {
                 setMovieRating(Math.ceil(data.vote_average * 10).toFixed(1));
+                data.release_date_utc = new Date(data.release_date).toUTCString();
             })
             .catch((error) => console.error('Error fetching movie details:', error));
     }, [movie.id]);
@@ -33,7 +36,6 @@ function MovieCard({ movie }) {
         navigate(`/movies/${movie.id}`);
     };
 
-    const releaseYear = movie.release_date.split('-')[0];
 
     return (
         <div className="movie-card" onClick={handleMovieClick} data-testid='movie-card'>
@@ -43,7 +45,7 @@ function MovieCard({ movie }) {
                 data-testid='movie-poster'
             />
             <h2 data-testid='movie-title' >{movie.title}</h2>
-            <p data-testid='movie-release-date' >{releaseYear}</p>
+            <p data-testid='movie-release-date' >{releaseDateUTC}</p>
             <div className="imdb-rating">
                 {movieRating && (
                     <>

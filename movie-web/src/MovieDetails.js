@@ -18,6 +18,7 @@ function MovieDetails() {
                 setMovieDetails(data);
                 // Set the movie rating to a state variable
                 setMovieRating(data.vote_average);
+                data.release_date_utc = new Date(data.release_date).toUTCString();
             })
             .catch((error) => console.error('Error fetching movie details:', error));
 
@@ -37,8 +38,6 @@ function MovieDetails() {
         return <div>Loading...</div>;
     }
 
-    const releaseYear = movieDetails.release_date.split('-')[0];
-
     return (
         <div>
             {trailerKey && (
@@ -53,7 +52,7 @@ function MovieDetails() {
             <div className='movie-details'>
                 <div className='details-flex'>
                     <h1 data-testid='movie-title' className='md-h1'>{movieDetails.title}</h1>
-                    <h1 data-testid='movie-release-date'>{releaseYear}</h1>
+                    <h1 data-testid='movie-release-date'>{movieDetails.release_date_utc}</h1>
                     <h1>Rating: {movieRating}</h1> {/* Display the movie rating */}
                     <h1 data-testid='movie-runtime'>{movieDetails.runtime} minutes</h1>
                 </div>
