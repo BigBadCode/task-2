@@ -7,7 +7,7 @@ function TopMovies({ topMovies, searchResults }) {
 
     return (
         <div>
-            <h1>{searchResults.length > 0 ? 'Search Results' : 'Top 10 Movies'}</h1>
+            <h1 className='top-h1'>{searchResults.length > 0 ? 'Search Results' : 'Featured Movies'}</h1>
             <div className="movie-grid">
                 {moviesToDisplay.map((movie) => (
                     <MovieCard key={movie.id} movie={movie} />

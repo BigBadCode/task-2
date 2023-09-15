@@ -34,7 +34,7 @@ function App() {
     <Router>
       <div>
         <header>
-          <Link to="/">MovieBox</Link>
+          <Link to="/" className='movie-box'>MovieBox</Link>
           <div className="search-bar">
             <input
               type="text"
@@ -43,9 +43,10 @@ function App() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <button onClick={handleSearch}>
-              <FontAwesomeIcon icon={faSearch} /> {/* Add the search icon */}
+              <FontAwesomeIcon icon={faSearch} className='icon' />
             </button>
           </div>
+          <p className='sign-in'>Sign In</p>
         </header>
 
         <Routes>

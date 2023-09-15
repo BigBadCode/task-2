@@ -41,7 +41,6 @@ function MovieDetails() {
 
     return (
         <div>
-            {/* Trailer */}
             {trailerKey && (
                 <iframe
                     title={`${movieDetails.title} Trailer`}
@@ -51,12 +50,15 @@ function MovieDetails() {
                     allowFullScreen
                 />
             )}
-
-            <h1>{movieDetails.title}</h1>
-            <p>Release Date: {releaseYear}</p>
-            <p>Rating: {movieRating}</p> {/* Display the movie rating */}
-            <p>Runtime: {movieDetails.runtime} minutes</p>
-            <p>Overview: {movieDetails.overview}</p>
+            <div className='movie-details'>
+                <div className='details-flex'>
+                    <h1 data-testid='movie-title' className='md-h1'>{movieDetails.title}</h1>
+                    <h1 data-testid='movie-release-date'>{releaseYear}</h1>
+                    <h1>Rating: {movieRating}</h1> {/* Display the movie rating */}
+                    <h1 data-testid='movie-runtime'>{movieDetails.runtime} minutes</h1>
+                </div>
+                <p data-testid='movie-overview' className='overview'>{movieDetails.overview}</p>
+            </div> 
         </div>
     );
 }

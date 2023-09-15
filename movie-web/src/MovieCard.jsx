@@ -23,7 +23,8 @@ function MovieCard({ movie }) {
     }, [movie.id]);
 
     
-    const handleLikeClick = () => {
+    const handleLikeClick = (e) => {
+        e.stopPropagation();
         setIsLiked(!isLiked);
     };
 
@@ -35,13 +36,14 @@ function MovieCard({ movie }) {
     const releaseYear = movie.release_date.split('-')[0];
 
     return (
-        <div className="movie-card" onClick={handleMovieClick}>
+        <div className="movie-card" onClick={handleMovieClick} data-testid='movie-card'>
             <img
-                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={`${movie.title} Poster`}
+                data-testid='movie-poster'
             />
-            <h2>{movie.title}</h2>
-            <p>Release Date: {releaseYear}</p>
+            <h2 data-testid='movie-title' >{movie.title}</h2>
+            <p data-testid='movie-release-date' >{releaseYear}</p>
             <div className="imdb-rating">
                 {movieRating && (
                     <>
